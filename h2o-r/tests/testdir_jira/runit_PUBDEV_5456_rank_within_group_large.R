@@ -1,9 +1,11 @@
 setwd(normalizePath(dirname(R.utils::commandArgs(asValues=TRUE)$"f")))
 source("../../scripts/h2o-r-test-setup.R")
+library(dplyr)
+library(data.table)
 
 # test derived from Nidhi/customer code
 test.pub.5456 <- function() {
-
+  browser()
   N=10
   set.seed(5)
   ID = sample(c(12,13,14,15,16,17),size=N,replace=TRUE)
@@ -34,9 +36,7 @@ test.pub.5456 <- function() {
   h2o.head(tt)
   dt_tt<- as.data.table(tt)
 
-  #Arrange by group and mutate a new rank column
-  library(dplyr)
-  library(data.table)
+  #Arrange by group and mutate a new rank colum
 
   #Sort the input data table - important to get accurate results
   dt_tt1 <- arrange(dt_tt,Column_to_arrange_by)
@@ -55,6 +55,7 @@ test.pub.5456 <- function() {
   #Rank and ddply *****
   rank_function <- function(df) { h2o.arrange(df, df[,3]) }
   tt1_RANK.HEX <- h2o.ddply(tt1.HEX, "Group_by_column", rank_function)
+  print(tt1_RANK.HEX)
 }
 
 doTest("PUBDEV-5456-rank-within-group", test.pub.5456)
