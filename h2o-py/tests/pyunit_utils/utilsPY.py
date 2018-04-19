@@ -3294,6 +3294,35 @@ def random_dataset(response_type, verbose=True, NTESTROWS=200):
         df.show()
     return df
 
+# generate random dataset of ncolumns of Strings, copied from Pasha
+def random_dataset_strings_only(nrow, ncol):
+    """Create and return a random dataset."""
+    fractions = dict()
+    fractions["real_fraction"] = 0  # Right now we are dropping string columns, so no point in having them.
+    fractions["categorical_fraction"] = 0
+    fractions["integer_fraction"] = 0
+    fractions["time_fraction"] = 0
+    fractions["string_fraction"] = 1  # Right now we are dropping string columns, so no point in having them.
+    fractions["binary_fraction"] = 0
+
+
+    df = h2o.create_frame(rows=nrow, cols=ncol, missing_fraction=0, has_response=False, **fractions)
+    return df
+
+# generate random dataset of ncolumns of enums only, copied from Pasha
+def random_dataset_enums_only(nrow, ncol, factorL=10):
+    """Create and return a random dataset."""
+    fractions = dict()
+    fractions["real_fraction"] = 0  # Right now we are dropping string columns, so no point in having them.
+    fractions["categorical_fraction"] = 1
+    fractions["integer_fraction"] = 0
+    fractions["time_fraction"] = 0
+    fractions["string_fraction"] = 0  # Right now we are dropping string columns, so no point in having them.
+    fractions["binary_fraction"] = 0
+
+    df = h2o.create_frame(rows=nrow, cols=ncol, missing_fraction=0, has_response=False, factors=factorL, **fractions)
+    return df
+
 def getMojoName(modelID):
     regex = re.compile("[+\\-* !@#$%^&()={}\\[\\]|;:'\"<>,.?/]")
     return regex.sub("_", modelID)
