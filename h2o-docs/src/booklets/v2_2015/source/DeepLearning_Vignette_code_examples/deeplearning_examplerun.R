@@ -3,8 +3,8 @@ y <- "C785"
 x <- setdiff(names(train), y)
 
 # Encode the response column as categorical for multinomial classification
-train[,y] <- as.factor(train[,y])
-test[,y] <- as.factor(test[,y])
+train[,y] <- h2o.asfactor(train[,y])
+test[,y] <- h2o.asfactor(test[,y])
 
 # Train Deep Learning model and validate on test set
 model <- h2o.deeplearning(
